@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/RobTillaart/LTR390_RT/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/RobTillaart/LTR390_RT.svg?maxAge=3600)](https://github.com/RobTillaart/LTR390_RT/releases)
-[![PlatformIO Registry](https://badges.registry.platformio.org/packages/robtillaart/library/LTR390_RT.svg)](https://registry.platformio.org/libraries/robtillaart/LTR390_RT)
+[![PlatformIO Registry](https://badges.registry.platformio.org/packages/robtillaart/library/LTR390.svg)](https://registry.platformio.org/libraries/robtillaart/LTR390)
 
 
 # LTR390
