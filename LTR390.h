@@ -3,7 +3,7 @@
 //    FILE: LTR390.h
 //  AUTHOR: Rob Tillaart
 //    DATE: 2024-04-29
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 // PURPOSE: Arduino library for the I2C LTR390 UV sensor.
 //     URL: https://github.com/RobTillaart/LTR390_RT
 
@@ -12,7 +12,7 @@
 #include "Wire.h"
 
 
-#define LTR390_LIB_VERSION         (F("0.1.0"))
+#define LTR390_LIB_VERSION         (F("0.1.1"))
 
 //  LTR390 ERROR CODES
 //  TODO
