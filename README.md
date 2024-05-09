@@ -147,6 +147,8 @@ with optional Wire interface.
 - fix / elaborate TODO's in code.
   - status and error codes
   - interrupts and thresholds
+- add **float getLUX(float wfac = 1)**
+- add **float getUVI(float wfac = 1)**
 
 #### Could
 
