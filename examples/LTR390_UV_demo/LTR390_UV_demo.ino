@@ -17,6 +17,7 @@ void setup()
   Serial.println(__FILE__);
   Serial.print("LTR390_LIB_VERSION: ");
   Serial.println(LTR390_LIB_VERSION);
+  Serial.println();
 
   Wire.begin();
 

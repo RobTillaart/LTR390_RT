@@ -111,16 +111,17 @@ public:
     return (reg & 0x02) > 0;
   }
 
+
   //////////////////////////////////////////////
   //
   //  MEASUREMENT CONFIGURATION
   //
-  void setResolution(uint8_t res)  //  0..5
+  void setResolution(uint8_t resolution)  //  res = 0..5
   {
-    if (res > 5) res = 5;
+    if (resolution > 5) resolution = 5;
     uint8_t reg = readRegister(LTR390_ALS_UVS_MEAS_RATE);
     reg &= 0x07;
-    reg |= (res << 4);
+    reg |= (resolution << 4);
     writeRegister(LTR390_ALS_UVS_MEAS_RATE, reg);
   }
 
@@ -130,7 +131,8 @@ public:
     return (reg >> 4) & 0x07;
   }
 
-  void setRate(uint8_t rate)  //  0..7
+
+  void setRate(uint8_t rate)  //  rate = 0..7
   {
     uint8_t reg = readRegister(LTR390_ALS_UVS_MEAS_RATE);
     reg &= 0xF8;
@@ -144,7 +146,8 @@ public:
     return reg & 0x07;
   }
 
-  void setGain(uint8_t gain)  //  0..4
+
+  void setGain(uint8_t gain)  //  gain = 0..4
   {
     if (gain > 4) gain = 4;
     uint8_t reg = readRegister(LTR390_ALS_UVS_GAIN);
@@ -164,13 +167,13 @@ public:
   //
   //  PART_ID
   //
-  uint8_t getPartID()   // 0xB ?
+  uint8_t getPartID()
   {
     uint8_t reg = readRegister(LTR390_PART_ID);
     return reg >> 4;
   }
 
-  uint8_t getRevisionID()  //  0x02 ?
+  uint8_t getRevisionID()
   {
     uint8_t reg = readRegister(LTR390_PART_ID);
     return reg & 0x0F;
@@ -180,9 +183,9 @@ public:
   //////////////////////////////////////////////
   //
   //  MAIN STATUS
-  //  TODO elaborate
+  //  TODO elaborate - need split? or masks?
   //
-  uint8_t getStatus()  //  need split? or masks?
+  uint8_t getStatus()
   {
     uint8_t reg = readRegister(LTR390_MAIN_STATUS);
     return reg & 0x38;
@@ -195,24 +198,22 @@ public:
   //
   uint32_t getALSData()
   {
-    // uint32_t value = readRegister(LTR390_ALS_DATA_2) & 0x0F;
-    // value <<= 8;
-    // value += readRegister(LTR390_ALS_DATA_1);
-    // value <<= 8;
-    // value += readRegister(LTR390_ALS_DATA_0);
-    // return value;
-    return readRegister(8) * 256 + readRegister(7);
+    uint32_t value = readRegister(LTR390_ALS_DATA_2) & 0x0F;
+    value <<= 8;
+    value += readRegister(LTR390_ALS_DATA_1);
+    value <<= 8;
+    value += readRegister(LTR390_ALS_DATA_0);
+    return value;
   }
 
   uint32_t getUVSData()
   {
-    // uint32_t value = readRegister(LTR390_UVS_DATA_2) & 0x0F;
-    // value <<= 8;
-    // value += readRegister(LTR390_UVS_DATA_1);
-    // value <<= 8;
-    // value += readRegister(LTR390_UVS_DATA_0);
-    // return value;
-    return readRegister(10) * 256 + readRegister(9);
+    uint32_t value = readRegister(LTR390_UVS_DATA_2) & 0x0F;
+    value <<= 8;
+    value += readRegister(LTR390_UVS_DATA_1);
+    value <<= 8;
+    value += readRegister(LTR390_UVS_DATA_0);
+    return value;
   }
 
 
@@ -256,6 +257,7 @@ public:
     writeRegister(LTR390_ALS_UVS_THRES_UP_2, value & 0x0F);
   }
 
+
   uint32_t getHighThreshold()
   {
     uint32_t value = readRegister(LTR390_ALS_UVS_THRES_UP_2) & 0x0F;
@@ -276,6 +278,7 @@ public:
     writeRegister(LTR390_ALS_UVS_THRES_LOW_2, value & 0x0F);
   }
 
+
   uint32_t getLowThreshold()
   {
     uint32_t value = readRegister(LTR390_ALS_UVS_THRES_LOW_2) & 0x0F;
@@ -291,14 +294,13 @@ public:
 //
 //  PRIVATE
 //
-
   int writeRegister(uint8_t reg, uint8_t value)
   {
     _wire->beginTransmission(_address);
     _wire->write(reg);
     _wire->write(value);
     int n = _wire->endTransmission();
-    //if (n != 0) 
+    //if (n != 0)
     //{
     //  Serial.print("write:\t");
     //  Serial.println(n);
@@ -312,7 +314,7 @@ public:
     _wire->beginTransmission(_address);
     _wire->write(reg);
     int n = _wire->endTransmission();
-    //if (n != 0) 
+    //if (n != 0)
     //{
     //  Serial.print("read:\t");
     //  Serial.println(n);
@@ -320,7 +322,7 @@ public:
     //}
 
     n = _wire->requestFrom(_address, (uint8_t)1);
-    if (n != 1) 
+    if (n != 1)
     {
     //  Serial.print("requestFrom: \t");
     //  Serial.print(n);
@@ -335,8 +337,6 @@ private:
   uint8_t _address;
 
 };
-
-
 
 
 //  -- END OF FILE --

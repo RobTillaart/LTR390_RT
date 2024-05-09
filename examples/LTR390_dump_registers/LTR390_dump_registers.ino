@@ -1,7 +1,7 @@
 //
 //    FILE: LTR390_dump_registers.ino
 //  AUTHOR: Rob Tillaart
-// PURPOSE: dump
+// PURPOSE: dump registers
 //     URL: https://github.com/RobTillaart/LTR390
 
 
@@ -17,6 +17,7 @@ void setup()
   Serial.println(__FILE__);
   Serial.print("LTR390_LIB_VERSION: ");
   Serial.println(LTR390_LIB_VERSION);
+  Serial.println();
 
   Wire.begin();
   Wire.setClock(100000);
@@ -32,7 +33,7 @@ void setup()
   uv.reset();
 
   //  registers according to datasheet
-  
+
   for (uint8_t reg = 0x00; reg < 0x01; reg++)
   {
     Serial.print(reg, HEX);
@@ -43,7 +44,7 @@ void setup()
     Serial.print(")\n");
   }
   Serial.println();
-  
+
   for (uint8_t reg = 0x04; reg < 0x08; reg++)
   {
     Serial.print(reg, HEX);
@@ -54,7 +55,7 @@ void setup()
     Serial.print(")\n");
   }
   Serial.println();
-  
+
   for (uint8_t reg = 0x0D; reg < 0x13; reg++)
   {
     Serial.print(reg, HEX);
@@ -65,7 +66,7 @@ void setup()
     Serial.print(")\n");
   }
   Serial.println();
-  
+
   for (uint8_t reg = 0x19; reg < 0x1B; reg++)
   {
     Serial.print(reg, HEX);
@@ -76,7 +77,7 @@ void setup()
     Serial.print(")\n");
   }
   Serial.println();
-  
+
   for (uint8_t reg = 0x21; reg < 0x27; reg++)
   {
     Serial.print(reg, HEX);
@@ -94,10 +95,11 @@ void setup()
 
 void loop()
 {
-   Serial.println(uv.readRegister(8) * 256 + uv.readRegister(7));
-   delay(100);
-   Serial.println(uv.readRegister(10) * 256 + uv.readRegister(9));
-   delay(100);
+  // lower bits of DATA
+  Serial.println(uv.readRegister(0x0E) * 256 + uv.readRegister(0x0D));
+  delay(100);
+  Serial.println(uv.readRegister(0x11) * 256 + uv.readRegister(0x10));
+  delay(100);
 }
 
 

@@ -16,23 +16,30 @@ Arduino library for the I2C LTR390 UV sensor.
 
 ## Description
 
-Experimental
+**Experimental**
 
-This library 
+This library is to read the LTR390 UV sensor directly.
 
-Operating voltage range: 1.7V .. 3.6V
+It was written after I ordered a LTR390 sensor (breakout) from DFRobotics.
+However that one had its own processor and its own interface. 
+So the result was two libraries for the same product.
 
+**Warning:** Operating voltage range: **1.7V .. 3.6V**  
+So it will not work on 5V devices
 
 
 ## I2C
 
-The device should work on 100 Khz and 400 Khz I2C bus.
+The device has a fixed address of 0x53 == 83 decimal according to datasheet.
 
-Fixed address of 0x53 == 83 decimal according to datasheet.
-However 0x1C / 28 was found with I2C scanner.
+#### I2C Speed
+
+The device should work on 100 kHz and 400 kHz I2C bus.
+
+To be tested.
 
 
-#### Multiplexing
+#### I2C Multiplexing
 
 Sometimes you need to control more devices than possible with the default
 address range the device provides.
@@ -50,7 +57,6 @@ too if they are behind the multiplexer.
 - https://github.com/RobTillaart/TCA9548
 
 
-
 #### Related
 
 - https://github.com/RobTillaart/LTR390_RT   (native LTR390)
@@ -65,37 +71,43 @@ too if they are behind the multiplexer.
 
 #### Constructor
 
-- **LTR390(TwoWire \* wire = &Wire)** 
-- **bool begin()**
-- **bool isConnected()** returns true if address is seen on I2C bus.
-- **uint8_t getAddress()**
+- **LTR390(TwoWire \* wire = &Wire)** Constructor 
+with optional Wire interface.
+- **bool begin()** returns true if device 0x53 can be seen on the I2C bus.
+- **bool isConnected()** returns true if device 0x53 can be seen on I2C bus.
+- **uint8_t getAddress()** returns 0x53, fixed address, for convenience.
 
 
 #### Main control
 
 - **void setALSMode()**
 - **void setUVSMode()**
-- **void reset()**
-- **void enable()**
-- **void disable()**
+- **void reset()** blocks for 100 ms.
+- **void enable()** idem.
+- **void disable()** idem.
+- **bool isEnabled()** returns current status.
+
 
 #### Measurement configuration
 
-- **void setResolution(uint8_t res)**  //  0..5
+- **void setResolution(uint8_t resolution)** resolution = 0..5
 - **uint8_t getResolution()**
-- **void setRate(uint8_t rate)**  //  0..7
+- **void setRate(uint8_t rate)** rate = 0..7
 - **uint8_t getRate()**
-- **void setGain(uint8_t gain)**  //  0..4
+- **void setGain(uint8_t gain)** gain = 0..4
 - **uint8_t getGain()**
+
 
 #### Part and revision ID
 
 - **uint8_t getPartID()** returns 11.
 - **uint8_t getRevisionID()** returns 2.
 
+
 #### Main status
 
-- **uint8_t getStatus()**  need split? or masks?
+- **uint8_t getStatus()** need split? or masks?
+
 
 #### Get data
 
@@ -110,6 +122,7 @@ too if they are behind the multiplexer.
 - **int setInterruptPersist(uint8_t value)**
 - **uint8_t getInterruptPersist()**
 
+
 #### Threshold
 
 - **void setHighThreshold(uint32_t value)**
@@ -122,20 +135,23 @@ too if they are behind the multiplexer.
 
 #### Must
 
-- improve documentation
-- test with hardware
-- elaborate readme.md a lot.
+- Elaborate and improve documentation a lot.
+  - add tables, ranges etc.
+- test with right hardware.
 
 #### Should
 
-- add examples
-- fix / elaborate TODO's
+- add examples.
+  - test example
+  - performance example
+- fix / elaborate TODO's in code.
+  - status and error codes
+  - interrupts and thresholds
 
 #### Could
 
 - add error handling
 - unit test or test example?
-
 
 #### Wont
 
