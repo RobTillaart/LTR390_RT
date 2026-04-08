@@ -71,9 +71,9 @@ namespace LTR390RT
   namespace STATUS
   {
     constexpr uint8_t POWER_ON  = 1 << 5; // 0x20
-    constexpr uint8_t INTERRUPT = 1 << 4; // 0x10
+    constexpr uint8_t INTERRUPT_BIT = 1 << 4; // 0x10
     constexpr uint8_t DATA_RDY  = 1 << 3; // 0x08
-    constexpr uint8_t MASK = POWER_ON | INTERRUPT | DATA_RDY;
+    constexpr uint8_t MASK = POWER_ON | INTERRUPT_BIT | DATA_RDY;
   }
 
   namespace PART_ID
@@ -272,7 +272,7 @@ public:
   [[nodiscard]] bool getInterruptStatus() const
   {
     uint8_t reg = readRegister(LTR390RT::REGISTER::MAIN_STATUS);
-    return (reg & LTR390RT::STATUS::INTERRUPT) > 0;
+    return (reg & LTR390RT::STATUS::INTERRUPT_BIT) > 0;
   }
 
   [[nodiscard]] bool getDataStatus() const
