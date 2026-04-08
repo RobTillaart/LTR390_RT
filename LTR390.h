@@ -64,10 +64,7 @@ class LTR390
 public:
   explicit LTR390(TwoWire *wire = &Wire):
     _wire{wire},
-    _address{LTR390_I2C::ADDRESS},
-    _resolution{2},
-    _rate{2},
-    _gain{1}
+    _address{LTR390_I2C::ADDRESS}
   {}
 
   bool begin()
@@ -135,7 +132,7 @@ public:
   {
     if (resolution > 5)
       resolution = 5;
-    _resolution = resolution;
+
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
     reg &= 0x07;
     reg |= (resolution << 4);
@@ -151,7 +148,7 @@ public:
   float getIntegrationTime() const
   {
     static constexpr uint16_t intTime[6] = {800, 400, 200, 100, 50, 25};
-    return intTime[_resolution] * 0.5f;
+    return intTime[getResolution()] * 0.5f;
   }
 
   //////////////////////////////////////////////
@@ -160,7 +157,7 @@ public:
   {
     if (rate > 7)
       rate = 7;
-    _rate = rate;
+    
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
     reg &= 0xF8;
     reg |= rate;
@@ -176,7 +173,7 @@ public:
   float getMeasurementTime() const
   {
     static constexpr uint16_t measTime[8] = {25, 50, 100, 200, 500, 1000, 2000, 2000};
-    return measTime[_rate];
+    return measTime[getRate()];
   }
 
   //////////////////////////////////////////////
@@ -185,7 +182,7 @@ public:
   {
     if (gain > 4)
       gain = 4;
-    _gain = gain;
+    
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_GAIN);
     reg &= 0xF8;
     reg |= gain;
@@ -202,7 +199,7 @@ public:
   uint8_t getGainFactor() const
   {
     static constexpr uint8_t gainFactor[5] = {1, 3, 6, 9, 18};
-    return gainFactor[_gain];
+    return gainFactor[getGain()];
   }
 
   //////////////////////////////////////////////
@@ -403,10 +400,6 @@ public:
 private:
   TwoWire *_wire;
   uint8_t _address;
-
-  uint8_t _resolution;
-  uint8_t _rate;
-  uint8_t _gain;
 };
 
 //  -- END OF FILE --
