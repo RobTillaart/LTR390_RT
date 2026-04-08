@@ -302,7 +302,7 @@ public:
     return writeRegister(LTR390RT_REGISTER::LTR390_INT_CFG, value);
   }
 
-  uint8_t getInterruptConfig()
+  uint8_t getInterruptConfig() const
   {
     return readRegister(LTR390RT_REGISTER::LTR390_INT_CFG);
   }
@@ -312,7 +312,7 @@ public:
     return writeRegister(LTR390RT_REGISTER::LTR390_INT_PST, value);
   }
 
-  uint8_t getInterruptPersist()
+  uint8_t getInterruptPersist() const
   {
     return readRegister(LTR390RT_REGISTER::LTR390_INT_PST);
   }
