@@ -59,6 +59,13 @@ namespace LTR390_I2C
   constexpr uint8_t ADDRESS = 0x53;
 }
 
+namespace LTR390_MEAS_RATE
+{
+  constexpr uint8_t RATE_MASK   = 0x07; // bits 0-2
+  constexpr uint8_t RES_MASK    = 0x70; // bits 4-6
+  constexpr uint8_t RES_SHIFT   = 4;
+}
+
 class LTR390
 {
 public:
@@ -118,7 +125,7 @@ public:
     writeRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL, reg);
   }
 
-  bool isEnabled() const
+  [[nodiscard]] bool isEnabled() const
   {
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL);
     return (reg & LTR390_MAIN_CTRL::ENABLE) > 0;
@@ -134,20 +141,20 @@ public:
       resolution = 5;
 
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
-    reg &= 0x07;
-    reg |= (resolution << 4);
+    reg &= LTR390_MEAS_RATE::RATE_MASK;
+    reg |= (resolution << LTR390_MEAS_RATE::RES_SHIFT);
     writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE, reg);
   }
 
-  uint8_t getResolution() const
+  [[nodiscard]] uint8_t getResolution() const
   {
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
-    return (reg >> 4) & 0x07;
+    return (reg >> LTR390_MEAS_RATE::RES_SHIFT) & LTR390_MEAS_RATE::RATE_MASK;
   }
 
-  float getIntegrationTime() const
+  [[nodiscard]] float getIntegrationTime() const
   {
-    static constexpr uint16_t intTime[6] = {800, 400, 200, 100, 50, 25};
+    static const uint16_t intTime[6] = {800, 400, 200, 100, 50, 25};
     return intTime[getResolution()] * 0.5f;
   }
 
@@ -159,20 +166,20 @@ public:
       rate = 7;
     
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
-    reg &= 0xF8;
+    reg &= ~LTR390_MEAS_RATE::RES_MASK;
     reg |= rate;
     writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE, reg);
   }
 
-  uint8_t getRate() const
+  [[nodiscard]] uint8_t getRate() const
   {
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
-    return reg & 0x07;
+    return reg & LTR390_MEAS_RATE::RATE_MASK;
   }
 
-  float getMeasurementTime() const
+  [[nodiscard]] float getMeasurementTime() const
   {
-    static constexpr uint16_t measTime[8] = {25, 50, 100, 200, 500, 1000, 2000, 2000};
+    static const uint16_t measTime[8] = {25, 50, 100, 200, 500, 1000, 2000, 2000};
     return measTime[getRate()];
   }
 
@@ -184,21 +191,21 @@ public:
       gain = 4;
     
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_GAIN);
-    reg &= 0xF8;
+    reg &= ~LTR390_MEAS_RATE::RATE_MASK;
     reg |= gain;
     writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_GAIN, reg);
   }
 
-  uint8_t getGain() const
+  [[nodiscard]] uint8_t getGain() const
   {
     //  return _gain; // from cache
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_GAIN);
-    return reg & 0x07;
+    return reg & LTR390_MEAS_RATE::RATE_MASK;
   }
 
-  uint8_t getGainFactor() const
+  [[nodiscard]] uint8_t getGainFactor() const
   {
-    static constexpr uint8_t gainFactor[5] = {1, 3, 6, 9, 18};
+    static const uint8_t gainFactor[5] = {1, 3, 6, 9, 18};
     return gainFactor[getGain()];
   }
 
@@ -206,13 +213,13 @@ public:
   //
   //  PART_ID
   //
-  uint8_t getPartID() const
+  [[nodiscard]] uint8_t getPartID() const
   {
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_PART_ID);
     return reg >> 4;
   }
 
-  uint8_t getRevisionID() const
+  [[nodiscard]] uint8_t getRevisionID() const
   {
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_PART_ID);
     return reg & 0x0F;
@@ -222,25 +229,25 @@ public:
   //
   //  MAIN STATUS
   //
-  uint8_t getStatus() const
+  [[nodiscard]] uint8_t getStatus() const
   {
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_STATUS);
     return reg & 0x38;
   }
 
-  bool getPowerOnStatus() const
+  [[nodiscard]] bool getPowerOnStatus() const
   {
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_STATUS);
     return (reg & 0x20) > 0;
   }
 
-  bool getInterruptStatus() const
+  [[nodiscard]] bool getInterruptStatus() const
   {
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_STATUS);
     return (reg & 0x10) > 0;
   }
 
-  bool getDataStatus() const
+  [[nodiscard]] bool getDataStatus() const
   {
     uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_STATUS);
     return (reg & 0x08) > 0;
@@ -250,42 +257,53 @@ public:
   //
   //  GET DATA
   //
-  uint32_t getALSData() const
+  [[nodiscard]] uint32_t getALSData() const
   {
     uint32_t value = readRegister(LTR390RT_REGISTER::LTR390_ALS_DATA_2) & 0x0F;
+
     value <<= 8;
     value += readRegister(LTR390RT_REGISTER::LTR390_ALS_DATA_1);
+
     value <<= 8;
     value += readRegister(LTR390RT_REGISTER::LTR390_ALS_DATA_0);
+
     return value;
   }
 
-  uint32_t getUVSData() const
+  [[nodiscard]] uint32_t getUVSData() const
   {
     uint32_t value = readRegister(LTR390RT_REGISTER::LTR390_UVS_DATA_2) & 0x0F;
+
     value <<= 8;
     value += readRegister(LTR390RT_REGISTER::LTR390_UVS_DATA_1);
+
     value <<= 8;
     value += readRegister(LTR390RT_REGISTER::LTR390_UVS_DATA_0);
+
     return value;
   }
 
-  float getLUX(float windowsFactor = 1.0f) const
+  [[nodiscard]] float getLUX(float windowsFactor = 1.0f) const
   {
     float lux = (100 * 0.6f) * getALSData();
     lux /= (getGainFactor() * getIntegrationTime());
+
     if (windowsFactor > 1.0f)
       lux *= windowsFactor;
+
     return lux;
   }
 
-  float getUVIndex(float windowsFactor = 1.0) const
+  [[nodiscard]] float getUVIndex(float windowsFactor = 1.0) const
   {
     float reciprokeSensitivity = (18 * 400) / 2300.0f;
     reciprokeSensitivity /= (getGainFactor() * getIntegrationTime());
-    uint32_t uvi = getUVSData() * reciprokeSensitivity;
+    
+    float uvi = getUVSData() * reciprokeSensitivity;
+
     if (windowsFactor > 1.0)
       uvi *= windowsFactor;
+
     return uvi;
   }
 
@@ -294,12 +312,12 @@ public:
   //  INTERRUPT
   //  TODO elaborate
   //
-  int setInterruptConfig(uint8_t value)
+  [[nodiscard]] int setInterruptConfig(uint8_t value)
   {
     return writeRegister(LTR390RT_REGISTER::LTR390_INT_CFG, value);
   }
 
-  uint8_t getInterruptConfig() const
+  [[nodiscard]] uint8_t getInterruptConfig() const
   {
     return readRegister(LTR390RT_REGISTER::LTR390_INT_CFG);
   }
@@ -309,7 +327,7 @@ public:
     return writeRegister(LTR390RT_REGISTER::LTR390_INT_PST, value);
   }
 
-  uint8_t getInterruptPersist() const
+  [[nodiscard]] uint8_t getInterruptPersist() const
   {
     return readRegister(LTR390RT_REGISTER::LTR390_INT_PST);
   }
@@ -322,19 +340,21 @@ public:
   void setHighThreshold(uint32_t value)
   {
     writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_0, value & 0xFF);
-    value >>= 8;
+    value >>= 8;    
     writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_1, value & 0xFF);
     value >>= 8;
     writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_2, value & 0x0F);
   }
 
-  uint32_t getHighThreshold() const
+  [[nodiscard]] uint32_t getHighThreshold() const
   {
     uint32_t value = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_2) & 0x0F;
+
     value <<= 8;
     value += readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_1);
     value <<= 8;
     value += readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_0);
+
     return value;
   }
 
@@ -347,13 +367,15 @@ public:
     writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_2, value & 0x0F);
   }
 
-  uint32_t getLowThreshold() const
+  [[nodiscard]] uint32_t getLowThreshold() const
   {
     uint32_t value = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_2) & 0x0F;
+
     value <<= 8;
     value += readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_1);
     value <<= 8;
     value += readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_0);
+
     return value;
   }
 
@@ -375,7 +397,7 @@ public:
     return n;
   }
 
-  uint8_t readRegister(uint8_t reg) const
+  uint8_t readRegister(uint8_t reg)
   {
     _wire->beginTransmission(_address);
     _wire->write(reg);
