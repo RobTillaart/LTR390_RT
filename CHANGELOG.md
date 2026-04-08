@@ -12,8 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - refactor register definitions using namespaces and `constexpr`.
+- introduce `LTR390RT` root namespace for all register and bitfield definitions.
 - remove internal cached state (`_gain`, `_rate`, `_resolution`) and rely on register reads.
 - improve readability and maintainability by replacing magic numbers with named constants.
+- explicit float literals to avoid implicit conversions.
 
 ### Fixed
 - fix incorrect bit masking in `setRate()` that could overwrite resolution bits.
@@ -22,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Breaking Changes
 - remove internal cached state. All configuration getters now read directly from hardware registers.
+- register and constant definitions are now under the `LTR390RT` namespace.
 
 ## [0.1.4] - 2026-03-31
 - fix #4, add specific status functions.
