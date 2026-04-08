@@ -15,55 +15,84 @@
 //  LTR390 ERROR CODES
 //  TODO
 
-//  LTR390 REGISTERS (page 13 datasheet)
-namespace LTR390RT_REGISTER
+namespace LTR390RT
 {
-  constexpr uint8_t LTR390_MAIN_CTRL             = 0x00;
-  constexpr uint8_t LTR390_ALS_UVS_MEAS_RATE     = 0x04;
-  constexpr uint8_t LTR390_ALS_UVS_GAIN          = 0x05;
-  constexpr uint8_t LTR390_PART_ID               = 0x06;
-  constexpr uint8_t LTR390_MAIN_STATUS           = 0x07;
+  //  LTR390 REGISTERS (page 13 datasheet)
+  namespace REGISTER
+  {
+    constexpr uint8_t MAIN_CTRL          = 0x00;
+    constexpr uint8_t ALS_UVS_MEAS_RATE  = 0x04;
+    constexpr uint8_t ALS_UVS_GAIN  = 0x05;
+    constexpr uint8_t PART_ID       = 0x06;
+    constexpr uint8_t MAIN_STATUS   = 0x07;
 
-  constexpr uint8_t LTR390_ALS_DATA_0            = 0x0D;
-  constexpr uint8_t LTR390_ALS_DATA_1            = 0x0E;
-  constexpr uint8_t LTR390_ALS_DATA_2            = 0x0F;
+    constexpr uint8_t ALS_DATA_0 = 0x0D;
+    constexpr uint8_t ALS_DATA_1 = 0x0E;
+    constexpr uint8_t ALS_DATA_2 = 0x0F;
 
-  constexpr uint8_t LTR390_UVS_DATA_0            = 0x10;
-  constexpr uint8_t LTR390_UVS_DATA_1            = 0x11;
-  constexpr uint8_t LTR390_UVS_DATA_2            = 0x12;
+    constexpr uint8_t UVS_DATA_0 = 0x10;
+    constexpr uint8_t UVS_DATA_1 = 0x11;
+    constexpr uint8_t UVS_DATA_2 = 0x12;
 
-  constexpr uint8_t LTR390_INT_CFG               = 0x19;
-  constexpr uint8_t LTR390_INT_PST               = 0x1A;
+    constexpr uint8_t INT_CFG  = 0x19;
+    constexpr uint8_t INT_PST  = 0x1A;
 
-  constexpr uint8_t LTR390_ALS_UVS_THRES_UP_0    = 0x21;
-  constexpr uint8_t LTR390_ALS_UVS_THRES_UP_1    = 0x22;
-  constexpr uint8_t LTR390_ALS_UVS_THRES_UP_2    = 0x23;
+    constexpr uint8_t ALS_UVS_THRES_UP_0 = 0x21;
+    constexpr uint8_t ALS_UVS_THRES_UP_1 = 0x22;
+    constexpr uint8_t ALS_UVS_THRES_UP_2 = 0x23;
 
-  constexpr uint8_t LTR390_ALS_UVS_THRES_LOW_0   = 0x24;
-  constexpr uint8_t LTR390_ALS_UVS_THRES_LOW_1   = 0x25;
-  constexpr uint8_t LTR390_ALS_UVS_THRES_LOW_2   = 0x26;
-}
+    constexpr uint8_t ALS_UVS_THRES_LOW_0 = 0x24;
+    constexpr uint8_t ALS_UVS_THRES_LOW_1 = 0x25;
+    constexpr uint8_t ALS_UVS_THRES_LOW_2 = 0x26;
+  }
 
-namespace LTR390_MAIN_CTRL
-{
-  constexpr uint8_t ENABLE   = 0x02; // Bit 1: ALS/UVS Enable
-  constexpr uint8_t UVS_MODE = 0x08; // Bit 3: 1 = UV, 0 = ALS
-  constexpr uint8_t SW_RESET = 0x10; // Bit 4: Software reset
+  namespace MAIN_CTRL
+  {
+    constexpr uint8_t ENABLE   = 0x02; // Bit 1: ALS/UVS Enable
+    constexpr uint8_t UVS_MODE = 0x08; // Bit 3: 1 = UV, 0 = ALS
+    constexpr uint8_t SW_RESET = 0x10; // Bit 4: Software reset
 
-  constexpr uint8_t ALS_ACTIVE = ENABLE;                 // ALS mode (UVS_MODE = 0)
-  constexpr uint8_t UVS_ACTIVE = ENABLE | UVS_MODE;      // UV mode
-}
+    constexpr uint8_t ALS_ACTIVE = ENABLE;            // ALS mode (UVS_MODE = 0)
+    constexpr uint8_t UVS_ACTIVE = ENABLE | UVS_MODE; // UV mode
+  }
 
-namespace LTR390_I2C
-{
-  constexpr uint8_t ADDRESS = 0x53;
-}
+  namespace I2C
+  {
+    constexpr uint8_t ADDRESS = 0x53;
+  }
 
-namespace LTR390_MEAS_RATE
-{
-  constexpr uint8_t RATE_MASK   = 0x07; // bits 0-2
-  constexpr uint8_t RES_MASK    = 0x70; // bits 4-6
-  constexpr uint8_t RES_SHIFT   = 4;
+  namespace MEAS_RATE
+  {
+    constexpr uint8_t RATE_MASK = 0x07; // bits 0-2
+    constexpr uint8_t RES_MASK  = 0x70; // bits 4-6
+    constexpr uint8_t RES_SHIFT = 4;
+  }
+
+  namespace STATUS
+  {
+    constexpr uint8_t POWER_ON  = 1 << 5; // 0x20
+    constexpr uint8_t INTERRUPT = 1 << 4; // 0x10
+    constexpr uint8_t DATA_RDY  = 1 << 3; // 0x08
+    constexpr uint8_t MASK = POWER_ON | INTERRUPT | DATA_RDY;
+  }
+
+  namespace PART_ID
+  {
+    constexpr uint8_t MASK     = 0xF0; // bits 7:4
+    constexpr uint8_t REV_MASK = 0x0F; // bits 3:0
+    constexpr uint8_t SHIFT    = 4;
+  }
+
+  namespace DATA
+  {
+    constexpr uint8_t ADC_DATA_MASK = 0x0F; // bits 3:0 valid data
+  }
+
+  namespace THRESHOLD
+  {
+    constexpr uint8_t MSB_MASK  = 0x0F; // upper/lower threshold high byte
+    constexpr uint8_t FULL_MASK = 0xFF; // full 8-bit mask
+  }
 }
 
 class LTR390
@@ -71,7 +100,7 @@ class LTR390
 public:
   explicit LTR390(TwoWire *wire = &Wire):
     _wire{wire},
-    _address{LTR390_I2C::ADDRESS}
+    _address{LTR390RT::I2C::ADDRESS}
   {}
 
   bool begin()
@@ -96,39 +125,39 @@ public:
   //
   void setALSMode()
   {
-    writeRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL, LTR390_MAIN_CTRL::ALS_ACTIVE);
+    writeRegister(LTR390RT::REGISTER::MAIN_CTRL, LTR390RT::MAIN_CTRL::ALS_ACTIVE);
   }
 
   void setUVSMode()
   {
-    writeRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL, LTR390_MAIN_CTRL::UVS_ACTIVE);
+    writeRegister(LTR390RT::REGISTER::MAIN_CTRL, LTR390RT::MAIN_CTRL::UVS_ACTIVE);
   }
 
   uint8_t reset()
   {
-    writeRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL, LTR390_MAIN_CTRL::SW_RESET);
+    writeRegister(LTR390RT::REGISTER::MAIN_CTRL, LTR390RT::MAIN_CTRL::SW_RESET);
     delay(100);
-    return readRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL);
+    return readRegister(LTR390RT::REGISTER::MAIN_CTRL);
   }
 
   void enable()
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL);
-    reg |= LTR390_MAIN_CTRL::ENABLE;
-    writeRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL, reg);
+    uint8_t reg = readRegister(LTR390RT::REGISTER::MAIN_CTRL);
+    reg |= LTR390RT::MAIN_CTRL::ENABLE;
+    writeRegister(LTR390RT::REGISTER::MAIN_CTRL, reg);
   }
 
   void disable()
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL);
-    reg &= ~LTR390_MAIN_CTRL::ENABLE;
-    writeRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL, reg);
+    uint8_t reg = readRegister(LTR390RT::REGISTER::MAIN_CTRL);
+    reg &= ~LTR390RT::MAIN_CTRL::ENABLE;
+    writeRegister(LTR390RT::REGISTER::MAIN_CTRL, reg);
   }
 
   [[nodiscard]] bool isEnabled() const
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_CTRL);
-    return (reg & LTR390_MAIN_CTRL::ENABLE) > 0;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::MAIN_CTRL);
+    return (reg & LTR390RT::MAIN_CTRL::ENABLE) > 0;
   }
 
   //////////////////////////////////////////////
@@ -140,16 +169,16 @@ public:
     if (resolution > 5)
       resolution = 5;
 
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
-    reg &= LTR390_MEAS_RATE::RATE_MASK;
-    reg |= (resolution << LTR390_MEAS_RATE::RES_SHIFT);
-    writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE, reg);
+    uint8_t reg = readRegister(LTR390RT::REGISTER::ALS_UVS_MEAS_RATE);
+    reg &= LTR390RT::MEAS_RATE::RATE_MASK;
+    reg |= (resolution << LTR390RT::MEAS_RATE::RES_SHIFT);
+    writeRegister(LTR390RT::REGISTER::ALS_UVS_MEAS_RATE, reg);
   }
 
   [[nodiscard]] uint8_t getResolution() const
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
-    return (reg >> LTR390_MEAS_RATE::RES_SHIFT) & LTR390_MEAS_RATE::RATE_MASK;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::ALS_UVS_MEAS_RATE);
+    return (reg >> LTR390RT::MEAS_RATE::RES_SHIFT) & LTR390RT::MEAS_RATE::RATE_MASK;
   }
 
   [[nodiscard]] float getIntegrationTime() const
@@ -165,16 +194,16 @@ public:
     if (rate > 7)
       rate = 7;
     
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
-    reg &= ~LTR390_MEAS_RATE::RES_MASK;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::ALS_UVS_MEAS_RATE);
+    reg &= ~LTR390RT::MEAS_RATE::RES_MASK;
     reg |= rate;
-    writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE, reg);
+    writeRegister(LTR390RT::REGISTER::ALS_UVS_MEAS_RATE, reg);
   }
 
   [[nodiscard]] uint8_t getRate() const
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_MEAS_RATE);
-    return reg & LTR390_MEAS_RATE::RATE_MASK;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::ALS_UVS_MEAS_RATE);
+    return reg & LTR390RT::MEAS_RATE::RATE_MASK;
   }
 
   [[nodiscard]] float getMeasurementTime() const
@@ -190,17 +219,16 @@ public:
     if (gain > 4)
       gain = 4;
     
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_GAIN);
-    reg &= ~LTR390_MEAS_RATE::RATE_MASK;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::ALS_UVS_GAIN);
+    reg &= ~LTR390RT::MEAS_RATE::RATE_MASK;
     reg |= gain;
-    writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_GAIN, reg);
+    writeRegister(LTR390RT::REGISTER::ALS_UVS_GAIN, reg);
   }
 
   [[nodiscard]] uint8_t getGain() const
   {
-    //  return _gain; // from cache
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_GAIN);
-    return reg & LTR390_MEAS_RATE::RATE_MASK;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::ALS_UVS_GAIN);
+    return reg & LTR390RT::MEAS_RATE::RATE_MASK;
   }
 
   [[nodiscard]] uint8_t getGainFactor() const
@@ -215,14 +243,14 @@ public:
   //
   [[nodiscard]] uint8_t getPartID() const
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_PART_ID);
-    return reg >> 4;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::PART_ID);
+    return (reg & LTR390RT::PART_ID::MASK) >> LTR390RT::PART_ID::SHIFT;
   }
 
   [[nodiscard]] uint8_t getRevisionID() const
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_PART_ID);
-    return reg & 0x0F;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::PART_ID);
+    return reg & LTR390RT::PART_ID::REV_MASK;
   }
 
   //////////////////////////////////////////////
@@ -231,26 +259,26 @@ public:
   //
   [[nodiscard]] uint8_t getStatus() const
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_STATUS);
-    return reg & 0x38;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::MAIN_STATUS);
+    return reg & LTR390RT::STATUS::MASK;
   }
 
   [[nodiscard]] bool getPowerOnStatus() const
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_STATUS);
-    return (reg & 0x20) > 0;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::MAIN_STATUS);
+    return (reg & LTR390RT::STATUS::POWER_ON) > 0;
   }
 
   [[nodiscard]] bool getInterruptStatus() const
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_STATUS);
-    return (reg & 0x10) > 0;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::MAIN_STATUS);
+    return (reg & LTR390RT::STATUS::INTERRUPT) > 0;
   }
 
   [[nodiscard]] bool getDataStatus() const
   {
-    uint8_t reg = readRegister(LTR390RT_REGISTER::LTR390_MAIN_STATUS);
-    return (reg & 0x08) > 0;
+    uint8_t reg = readRegister(LTR390RT::REGISTER::MAIN_STATUS);
+    return (reg & LTR390RT::STATUS::DATA_RDY) > 0;
   }
 
   //////////////////////////////////////////////
@@ -259,33 +287,33 @@ public:
   //
   [[nodiscard]] uint32_t getALSData() const
   {
-    uint32_t value = readRegister(LTR390RT_REGISTER::LTR390_ALS_DATA_2) & 0x0F;
+    uint32_t value = readRegister(LTR390RT::REGISTER::ALS_DATA_2) & LTR390RT::DATA::ADC_DATA_MASK;
 
     value <<= 8;
-    value += readRegister(LTR390RT_REGISTER::LTR390_ALS_DATA_1);
+    value += readRegister(LTR390RT::REGISTER::ALS_DATA_1);
 
     value <<= 8;
-    value += readRegister(LTR390RT_REGISTER::LTR390_ALS_DATA_0);
+    value += readRegister(LTR390RT::REGISTER::ALS_DATA_0);
 
     return value;
   }
 
   [[nodiscard]] uint32_t getUVSData() const
   {
-    uint32_t value = readRegister(LTR390RT_REGISTER::LTR390_UVS_DATA_2) & 0x0F;
+    uint32_t value = readRegister(LTR390RT::REGISTER::UVS_DATA_2) & LTR390RT::DATA::ADC_DATA_MASK;
 
     value <<= 8;
-    value += readRegister(LTR390RT_REGISTER::LTR390_UVS_DATA_1);
+    value += readRegister(LTR390RT::REGISTER::UVS_DATA_1);
 
     value <<= 8;
-    value += readRegister(LTR390RT_REGISTER::LTR390_UVS_DATA_0);
+    value += readRegister(LTR390RT::REGISTER::UVS_DATA_0);
 
     return value;
   }
 
   [[nodiscard]] float getLUX(float windowsFactor = 1.0f) const
   {
-    float lux = (100 * 0.6f) * getALSData();
+    float lux = (100.0f * 0.6f) * getALSData();
     lux /= (getGainFactor() * getIntegrationTime());
 
     if (windowsFactor > 1.0f)
@@ -294,14 +322,14 @@ public:
     return lux;
   }
 
-  [[nodiscard]] float getUVIndex(float windowsFactor = 1.0) const
+  [[nodiscard]] float getUVIndex(float windowsFactor = 1.0f) const
   {
-    float reciprokeSensitivity = (18 * 400) / 2300.0f;
+    float reciprokeSensitivity = (18.0f * 400.0f) / 2300.0f;
     reciprokeSensitivity /= (getGainFactor() * getIntegrationTime());
     
     float uvi = getUVSData() * reciprokeSensitivity;
 
-    if (windowsFactor > 1.0)
+    if (windowsFactor > 1.0f)
       uvi *= windowsFactor;
 
     return uvi;
@@ -314,22 +342,22 @@ public:
   //
   [[nodiscard]] int setInterruptConfig(uint8_t value)
   {
-    return writeRegister(LTR390RT_REGISTER::LTR390_INT_CFG, value);
+    return writeRegister(LTR390RT::REGISTER::INT_CFG, value);
   }
 
   [[nodiscard]] uint8_t getInterruptConfig() const
   {
-    return readRegister(LTR390RT_REGISTER::LTR390_INT_CFG);
+    return readRegister(LTR390RT::REGISTER::INT_CFG);
   }
 
   int setInterruptPersist(uint8_t value)
   {
-    return writeRegister(LTR390RT_REGISTER::LTR390_INT_PST, value);
+    return writeRegister(LTR390RT::REGISTER::INT_PST, value);
   }
 
   [[nodiscard]] uint8_t getInterruptPersist() const
   {
-    return readRegister(LTR390RT_REGISTER::LTR390_INT_PST);
+    return readRegister(LTR390RT::REGISTER::INT_PST);
   }
 
   //////////////////////////////////////////////
@@ -339,42 +367,42 @@ public:
   //
   void setHighThreshold(uint32_t value)
   {
-    writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_0, value & 0xFF);
+    writeRegister(LTR390RT::REGISTER::ALS_UVS_THRES_UP_0, value & LTR390RT::THRESHOLD::FULL_MASK);
     value >>= 8;    
-    writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_1, value & 0xFF);
+    writeRegister(LTR390RT::REGISTER::ALS_UVS_THRES_UP_1, value & LTR390RT::THRESHOLD::FULL_MASK);
     value >>= 8;
-    writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_2, value & 0x0F);
+    writeRegister(LTR390RT::REGISTER::ALS_UVS_THRES_UP_2, value & LTR390RT::THRESHOLD::MSB_MASK);
   }
 
   [[nodiscard]] uint32_t getHighThreshold() const
   {
-    uint32_t value = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_2) & 0x0F;
+    uint32_t value = readRegister(LTR390RT::REGISTER::ALS_UVS_THRES_UP_2) & LTR390RT::THRESHOLD::MSB_MASK;
 
     value <<= 8;
-    value += readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_1);
+    value += readRegister(LTR390RT::REGISTER::ALS_UVS_THRES_UP_1);
     value <<= 8;
-    value += readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_UP_0);
+    value += readRegister(LTR390RT::REGISTER::ALS_UVS_THRES_UP_0);
 
     return value;
   }
 
   void setLowThreshold(uint32_t value)
   {
-    writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_0, value & 0xFF);
+    writeRegister(LTR390RT::REGISTER::ALS_UVS_THRES_LOW_0, value & LTR390RT::THRESHOLD::FULL_MASK);
     value >>= 8;
-    writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_1, value & 0xFF);
+    writeRegister(LTR390RT::REGISTER::ALS_UVS_THRES_LOW_1, value & LTR390RT::THRESHOLD::FULL_MASK);
     value >>= 8;
-    writeRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_2, value & 0x0F);
+    writeRegister(LTR390RT::REGISTER::ALS_UVS_THRES_LOW_2, value & LTR390RT::THRESHOLD::MSB_MASK);
   }
 
   [[nodiscard]] uint32_t getLowThreshold() const
   {
-    uint32_t value = readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_2) & 0x0F;
+    uint32_t value = readRegister(LTR390RT::REGISTER::ALS_UVS_THRES_LOW_2) & LTR390RT::THRESHOLD::MSB_MASK;
 
     value <<= 8;
-    value += readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_1);
+    value += readRegister(LTR390RT::REGISTER::ALS_UVS_THRES_LOW_1);
     value <<= 8;
-    value += readRegister(LTR390RT_REGISTER::LTR390_ALS_UVS_THRES_LOW_0);
+    value += readRegister(LTR390RT::REGISTER::ALS_UVS_THRES_LOW_0);
 
     return value;
   }
