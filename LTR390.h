@@ -397,7 +397,7 @@ public:
     return n;
   }
 
-  uint8_t readRegister(uint8_t reg)
+  uint8_t readRegister(uint8_t reg) const
   {
     _wire->beginTransmission(_address);
     _wire->write(reg);
