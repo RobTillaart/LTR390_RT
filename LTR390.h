@@ -22,9 +22,9 @@ namespace LTR390RT
   {
     constexpr uint8_t MAIN_CTRL          = 0x00;
     constexpr uint8_t ALS_UVS_MEAS_RATE  = 0x04;
-    constexpr uint8_t ALS_UVS_GAIN  = 0x05;
-    constexpr uint8_t PART_ID       = 0x06;
-    constexpr uint8_t MAIN_STATUS   = 0x07;
+    constexpr uint8_t ALS_UVS_GAIN       = 0x05;
+    constexpr uint8_t PART_ID            = 0x06;
+    constexpr uint8_t MAIN_STATUS        = 0x07;
 
     constexpr uint8_t ALS_DATA_0 = 0x0D;
     constexpr uint8_t ALS_DATA_1 = 0x0E;
@@ -34,12 +34,12 @@ namespace LTR390RT
     constexpr uint8_t UVS_DATA_1 = 0x11;
     constexpr uint8_t UVS_DATA_2 = 0x12;
 
-    constexpr uint8_t INT_CFG  = 0x19;
-    constexpr uint8_t INT_PST  = 0x1A;
+    constexpr uint8_t INT_CFG    = 0x19;
+    constexpr uint8_t INT_PST    = 0x1A;
 
-    constexpr uint8_t ALS_UVS_THRES_UP_0 = 0x21;
-    constexpr uint8_t ALS_UVS_THRES_UP_1 = 0x22;
-    constexpr uint8_t ALS_UVS_THRES_UP_2 = 0x23;
+    constexpr uint8_t ALS_UVS_THRES_UP_0  = 0x21;
+    constexpr uint8_t ALS_UVS_THRES_UP_1  = 0x22;
+    constexpr uint8_t ALS_UVS_THRES_UP_2  = 0x23;
 
     constexpr uint8_t ALS_UVS_THRES_LOW_0 = 0x24;
     constexpr uint8_t ALS_UVS_THRES_LOW_1 = 0x25;
@@ -48,12 +48,12 @@ namespace LTR390RT
 
   namespace MAIN_CTRL
   {
-    constexpr uint8_t ENABLE   = 0x02; // Bit 1: ALS/UVS Enable
-    constexpr uint8_t UVS_MODE = 0x08; // Bit 3: 1 = UV, 0 = ALS
-    constexpr uint8_t SW_RESET = 0x10; // Bit 4: Software reset
+    constexpr uint8_t ENABLE   = 0x02;  //  Bit 1: ALS/UVS Enable
+    constexpr uint8_t UVS_MODE = 0x08;  //  Bit 3: 1 = UV, 0 = ALS
+    constexpr uint8_t SW_RESET = 0x10;  //  Bit 4: Software reset
 
-    constexpr uint8_t ALS_ACTIVE = ENABLE;            // ALS mode (UVS_MODE = 0)
-    constexpr uint8_t UVS_ACTIVE = ENABLE | UVS_MODE; // UV mode
+    constexpr uint8_t ALS_ACTIVE = ENABLE;             //  ALS mode (UVS_MODE = 0)
+    constexpr uint8_t UVS_ACTIVE = ENABLE | UVS_MODE;  //  UV mode
   }
 
   namespace I2C
